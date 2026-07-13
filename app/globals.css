@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #faf7f2;
+  --color-ink: #211d19;
+  --color-ink-muted: #6e655c;
+  --color-line: #e7e0d6;
+  --color-accent: #6f7d62;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-worksans), sans-serif;
+}
+
+::selection { background: var(--color-accent); color: var(--color-paper); }
