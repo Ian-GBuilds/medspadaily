@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import InlineNewsletterCTA from "@/components/InlineNewsletterCTA";
 import JsonLd from "@/components/JsonLd";
 import KeyTakeaways from "@/components/KeyTakeaways";
 import MedicalDisclaimer from "@/components/MedicalDisclaimer";
@@ -82,6 +83,7 @@ export default async function StoryPage({ params }: Props) {
         </section>
       )}
       <SourcesBlock sources={story.sources} />
+      <InlineNewsletterCTA source="article" />
       {related.length > 0 && (
         <section className="mt-12 border-t border-line pt-8">
           <h2 className="font-sans text-xs uppercase tracking-widest text-ink-muted">Related treatments</h2>

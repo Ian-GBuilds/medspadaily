@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Newsreader, Work_Sans } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Analytics from "@/components/Analytics";
+import WebVitals from "@/components/WebVitals";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -29,6 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="mx-auto w-full max-w-3xl px-6">{children}</main>
         <Footer />
+        <Analytics />
+        <WebVitals />
       </body>
     </html>
   );

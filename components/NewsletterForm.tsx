@@ -1,13 +1,19 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { subscribeAction, type SubscribeState } from "@/app/newsletter-actions";
+import { trackEvent } from "@/lib/analytics";
 
-export default function NewsletterForm() {
+export default function NewsletterForm({ source = "footer" }: { source?: string }) {
   const [state, formAction, pending] = useActionState<SubscribeState, FormData>(
     subscribeAction,
     null,
   );
+
+  // Report a conversion once the double-opt-in email has been sent successfully.
+  useEffect(() => {
+    if (state?.ok) trackEvent("newsletter_signup", { source });
+  }, [state, source]);
 
   return (
     <form
