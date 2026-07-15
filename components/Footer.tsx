@@ -69,7 +69,11 @@ export default async function Footer() {
                     href={`/${CATEGORY_ROUTES[c]}`}
                     className="text-sm text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    {CATEGORY_LABELS[c]}
+                    {/* News desk is called "Treatment News" in navigation
+                        to disambiguate it from the reference index at
+                        /treatments below. See Header.tsx for the matching
+                        override. */}
+                    {c === "treatments" ? "Treatment News" : CATEGORY_LABELS[c]}
                   </Link>
                 </li>
               ))}
@@ -78,7 +82,7 @@ export default async function Footer() {
                   href="/treatments"
                   className="text-sm text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  Treatment guide
+                  Treatments
                 </Link>
               </li>
             </ul>
