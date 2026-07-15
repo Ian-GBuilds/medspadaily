@@ -11,3 +11,92 @@
 }
 
 ::selection { background: var(--color-accent); color: var(--color-paper); }
+
+/* ---------------------------------------------------------------------------
+   Editorial primitives.
+
+   These extend the Tailwind utilities with the print-set details the design
+   system calls for: a genuine drop cap on the first paragraph of an article,
+   an editorial pull-quote treatment, and a small-caps run for headings. They
+   are opt-in — a page uses `prose-msd` to get the article treatment, and any
+   element can carry `small-caps` for the printed-label voice.
+
+   The scope is deliberately narrow: only what's used in a story page or a
+   standfirst block. This is not a full typography plugin; it's the six
+   things a considered publication needs and no more.
+--------------------------------------------------------------------------- */
+
+/* Drop cap on the first paragraph of an article body. The size is chosen to
+   land the cap on the fourth text line at the current body size and
+   line-height; padding-right creates the wrapping gutter. */
+.prose-msd > p:first-of-type::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 3.25em;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.5rem;
+  margin-top: 0.35rem;
+  color: var(--color-ink);
+}
+
+/* Pull quote (a `>` block quote inside prose). Newsreader italic, larger
+   than body, with a 2px sage rule down the left — the one moment per screen
+   the accent color is spent. */
+.prose-msd blockquote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.375rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  padding-left: 1.5rem;
+  margin: 2.25rem 0;
+  border-left: 2px solid var(--color-accent);
+  text-wrap: pretty;
+}
+.prose-msd blockquote p { margin: 0; }
+
+/* Prose body defaults — hard-cap the measure at 65ch so lines never run to
+   the viewport edge on wide screens. The measure lives on the container so
+   nested lists inherit it. */
+.prose-msd {
+  max-width: 65ch;
+}
+
+/* Ordered / unordered list defaults inside prose — small hanging indent so
+   the numbers/bullets read as a ledger rather than a bulleted memo. */
+.prose-msd ol,
+.prose-msd ul {
+  padding-left: 1.5rem;
+}
+.prose-msd li {
+  padding-left: 0.25rem;
+}
+.prose-msd li + li {
+  margin-top: 0.5rem;
+}
+
+/* Small-caps utility — used on h2s and the standfirst kicker so headings
+   read as printed labels rather than italicised startup subheads. Falls back
+   gracefully on browsers that don't support font-variant-caps. */
+.small-caps {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* Numbered bibliography — a two-column grid where the number is a hanging
+   indent, giving the sources block the visual weight of a printed reference
+   list. Consumed by SourcesBlock. */
+.bibliography {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  column-gap: 0.5rem;
+  row-gap: 1.25rem;
+}
+.bibliography-num {
+  font-family: var(--font-serif);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-muted);
+  text-align: right;
+  padding-right: 0.5rem;
+}

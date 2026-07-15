@@ -1,7 +1,44 @@
 import StoryCard from "@/components/StoryCard";
 import { getPublishedStories } from "@/lib/db/queries";
 import type { StoryCategory } from "@/lib/db/types";
-import { CATEGORY_LABELS } from "@/lib/site";
+import {
+  CATEGORIES,
+  CATEGORY_DESCRIPTIONS,
+  CATEGORY_LABELS,
+  CATEGORY_TIER_RULE,
+  TIER_META,
+} from "@/lib/site";
+
+// ---------------------------------------------------------------------------
+// CategoryArchive — a section, not just an archive list.
+//
+// The header block wears the section's identity:
+//
+//   Kicker:     "Section n · The [x] desk" — locates the category in the
+//               masthead's implicit table of contents.
+//   Headline:   the category name, roman serif at scale.
+//   Standing:   the CATEGORY_DESCRIPTIONS mission line.
+//   Rule line:  "Requires Tier 1 sources" or "Accepts Tier 2 sources" —
+//               pulled from CATEGORY_TIER_RULE. This is the moment the
+//               tier system is contextually explained, so a reader who
+//               lands here from search knows the standard.
+//
+// Below that, a hairline-divided story list. Each card carries its tier
+// badge, so the reader can scan a section by strength of evidence.
+// ---------------------------------------------------------------------------
+
+// Section numbering — order-based, roman numerals. Kept small so we don't
+// pull in a numeral library for two-digit output.
+function toRoman(n: number): string {
+  const seq: [number, string][] = [
+    [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
+  ];
+  let out = "";
+  for (const [v, s] of seq) {
+    while (n >= v) { out += s; n -= v; }
+  }
+  return out || "I";
+}
 
 export default async function CategoryArchive({
   category,
@@ -9,19 +46,54 @@ export default async function CategoryArchive({
   category: StoryCategory;
 }) {
   const stories = await getPublishedStories({ category });
+  const rule = CATEGORY_TIER_RULE[category];
+  const ruleMeta = TIER_META[rule];
+  const sectionNo = toRoman(CATEGORIES.indexOf(category) + 1);
+  const ruleLine =
+    rule === 1
+      ? `Requires ${ruleMeta.label} sources · ${ruleMeta.short}`
+      : `Accepts ${ruleMeta.label} sources · ${ruleMeta.short}`;
+
   return (
     <div className="py-12">
-      <h1 className="text-4xl leading-tight">{CATEGORY_LABELS[category]}</h1>
-      <section className="mt-8 divide-y divide-line">
-        {stories.map((story) => (
-          <StoryCard key={story.id} story={story} />
-        ))}
-      </section>
-      {stories.length === 0 && (
-        <p className="py-24 text-center text-ink-muted">
-          No stories in this section yet.
+      {/* Header block */}
+      <div className="border-b border-line pb-10">
+        <p className="small-caps font-sans text-xs text-ink-muted">
+          Section {sectionNo} · The {CATEGORY_LABELS[category]} desk
         </p>
-      )}
+        <h1 className="mt-3 text-4xl leading-[1.1] text-wrap-balance sm:text-5xl">
+          {CATEGORY_LABELS[category]}
+        </h1>
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          {CATEGORY_DESCRIPTIONS[category]}
+        </p>
+        <p className="mt-6 font-sans text-xs uppercase tracking-[0.16em] text-accent">
+          {ruleLine}
+        </p>
+      </div>
+
+      {/* Story list */}
+      <section aria-label={`${CATEGORY_LABELS[category]} stories`}>
+        <div className="flex items-baseline justify-between border-b border-line py-3">
+          <h2 className="small-caps font-sans text-xs text-ink-muted">
+            {stories.length === 0
+              ? "No stories yet"
+              : stories.length === 1
+                ? "One story"
+                : `${stories.length} stories`}
+          </h2>
+        </div>
+        <div className="divide-y divide-line">
+          {stories.map((story) => (
+            <StoryCard key={story.id} story={story} variant="digest" />
+          ))}
+        </div>
+        {stories.length === 0 && (
+          <p className="py-24 text-center text-ink-muted">
+            The first story in this section is on its way.
+          </p>
+        )}
+      </section>
     </div>
   );
 }
