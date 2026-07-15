@@ -55,3 +55,19 @@ export async function getRelatedStoriesForTreatment(
   if (error) throw error;
   return (data ?? []) as StoryRow[];
 }
+
+// Total published stories — the "edition number" on the masthead. Cheap
+// head-count query (no rows fetched). Returns 0 on any error so the
+// masthead never blocks the render if Supabase is unreachable at build.
+export async function getPublishedStoryCount(): Promise<number> {
+  try {
+    const { count, error } = await supabasePublic()
+      .from("stories")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "published");
+    if (error) throw error;
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+}
