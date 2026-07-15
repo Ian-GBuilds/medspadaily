@@ -24,10 +24,19 @@ import { getPublishedStoryCount } from "@/lib/db/queries";
 // edition line degrades to just the date.
 // ---------------------------------------------------------------------------
 
+// Nav labels intentionally diverge from CATEGORY_LABELS in one place:
+// the `treatments` news desk shows as "Treatment News" in the nav, so the
+// reference index at /treatments can keep the plain "Treatments" label.
+// Elsewhere (story eyebrows, section H1s, footer sections) CATEGORY_LABELS
+// stays canonical — the news desk is still "The Treatments desk" there.
+const NAV_LABEL_OVERRIDES: Partial<Record<string, string>> = {
+  treatments: "Treatment News",
+};
+
 const navLinks: { href: string; label: string }[] = [
   ...CATEGORIES.map((category) => ({
     href: `/${CATEGORY_ROUTES[category]}`,
-    label: CATEGORY_LABELS[category],
+    label: NAV_LABEL_OVERRIDES[category] ?? CATEGORY_LABELS[category],
   })),
   { href: "/treatments", label: "Treatments" },
   { href: "/about", label: "About" },
