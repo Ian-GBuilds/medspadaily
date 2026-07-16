@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "July 13, 2026";
+const LAST_UPDATED = "July 15, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -55,8 +55,9 @@ export default function PrivacyPage() {
         <p className="mt-5 leading-relaxed text-ink-muted">
           We rely on a small number of vendors to run the site, and your data may pass
           through them solely to provide the service: our hosting and content-delivery
-          provider, our database provider, and our email-delivery provider. Each processes
-          data on our behalf under its own privacy and security terms.
+          provider, our database provider, our email-delivery provider, and — only after you
+          accept analytics cookies — Google Analytics for aggregate traffic measurement. Each
+          processes data on our behalf under its own privacy and security terms.
         </p>
       </section>
 
@@ -65,9 +66,19 @@ export default function PrivacyPage() {
           Cookies
         </h2>
         <p className="mt-5 leading-relaxed text-ink-muted">
-          The public site uses only essential cookies needed to load pages. Signed-in
-          editors use an authentication cookie to stay logged in to the private editorial
-          tools. We do not use advertising or cross-site tracking cookies.
+          Essential cookies needed to load pages are always on, and signed-in editors use an
+          authentication cookie to stay logged in to the private editorial tools. We do not
+          use advertising or cross-site tracking cookies.
+        </p>
+        <p className="mt-5 leading-relaxed text-ink-muted">
+          For analytics we use Google Analytics 4 with Google Consent Mode set to{" "}
+          <em>deny</em> analytics storage by default, so it runs cookieless and sets no
+          analytics cookies until you choose to allow them. On your first visit a banner asks
+          whether to accept or reject. <strong>Accept</strong> and Google Analytics sets a
+          first-party <code>_ga</code> cookie to measure aggregate traffic — never to
+          identify you or advertise to you. <strong>Reject</strong> (or make no choice) and no
+          analytics cookies are set; any existing ones are deleted. You can change or withdraw
+          your choice anytime with the &ldquo;Cookie choices&rdquo; link in the footer.
         </p>
       </section>
 
