@@ -23,8 +23,10 @@ import {
 //               tier system is contextually explained, so a reader who
 //               lands here from search knows the standard.
 //
-// Below that, a hairline-divided story list. Each card carries its tier
-// badge, so the reader can scan a section by strength of evidence.
+// Below that, a two-up magazine-index grid of story cards (hero image +
+// tier badge + headline + dek + date), collapsing to one column on
+// mobile. The tier badge on each card lets the reader scan a section by
+// strength of evidence.
 // ---------------------------------------------------------------------------
 
 // Section numbering — order-based, roman numerals. Kept small so we don't
@@ -72,7 +74,16 @@ export default async function CategoryArchive({
         </p>
       </div>
 
-      {/* Story list */}
+      {/* Story list — magazine-index grid.
+       *
+       * We use `variant="medium"` (the homepage 2nd-tier style: hero image
+       * on top, then eyebrow + tier + headline + dek + date) so the hero
+       * image we already generate per story shows up in the section index.
+       * Homepage MEDIUM uses `sm:grid-cols-2`; we match that here so a
+       * category page reads like a two-up magazine index on tablet and up,
+       * one-column on mobile. Gap and rhythm are tuned to sit slightly
+       * looser than the homepage band because sections can be much longer.
+       */}
       <section aria-label={`${CATEGORY_LABELS[category]} stories`}>
         <div className="flex items-baseline justify-between border-b border-line py-3">
           <h2 className="small-caps font-sans text-xs text-ink-muted">
@@ -83,12 +94,13 @@ export default async function CategoryArchive({
                 : `${stories.length} stories`}
           </h2>
         </div>
-        <div className="divide-y divide-line">
-          {stories.map((story) => (
-            <StoryCard key={story.id} story={story} variant="digest" />
-          ))}
-        </div>
-        {stories.length === 0 && (
+        {stories.length > 0 ? (
+          <div className="grid gap-x-8 gap-y-12 py-10 sm:grid-cols-2">
+            {stories.map((story) => (
+              <StoryCard key={story.id} story={story} variant="medium" />
+            ))}
+          </div>
+        ) : (
           <p className="py-24 text-center text-ink-muted">
             The first story in this section is on its way.
           </p>
