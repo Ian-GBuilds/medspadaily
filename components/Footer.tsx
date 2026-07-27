@@ -7,6 +7,7 @@ import {
 } from "@/lib/site";
 import { getPublishedStoryCount } from "@/lib/db/queries";
 import NewsletterForm from "@/components/NewsletterForm";
+import CookieSettingsButton from "@/components/CookieSettingsButton";
 
 // ---------------------------------------------------------------------------
 // Footer — the paper's colophon.
@@ -131,6 +132,7 @@ export default async function Footer() {
             <a href="/feed.xml" className={utilityLinkClass}>RSS</a>
             <Link href="/privacy" className={utilityLinkClass}>Privacy</Link>
             <Link href="/terms" className={utilityLinkClass}>Terms</Link>
+            <CookieSettingsButton className={utilityLinkClass} />
           </nav>
         </div>
       </div>
