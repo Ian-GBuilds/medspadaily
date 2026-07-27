@@ -1,10 +1,7 @@
 import StoryReview from "@/components/admin/StoryReview";
-import { generateNow, requireAdmin } from "@/app/admin/actions";
+import { requireAdmin } from "@/app/admin/actions";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { CATEGORIES, CATEGORY_LABELS } from "@/lib/site";
 import type { PipelineRunRow, StoryRow } from "@/lib/db/types";
-
-export const maxDuration = 300;
 
 export default async function AdminPage() {
   await requireAdmin();
@@ -42,38 +39,6 @@ export default async function AdminPage() {
           </p>
         </div>
       )}
-
-      <details className="mt-8 border border-line p-4">
-        <summary className="cursor-pointer font-sans text-xs uppercase tracking-widest text-ink-muted">
-          Generate now
-        </summary>
-        <form
-          action={generateNow}
-          className="mt-4 flex flex-wrap items-center gap-3"
-        >
-          <label htmlFor="generate-category" className="sr-only">
-            Category
-          </label>
-          <select
-            id="generate-category"
-            name="category"
-            defaultValue={CATEGORIES[0]}
-            className="border border-line bg-paper px-3 py-2 font-sans text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            {CATEGORIES.map((category) => (
-              <option key={category} value={category}>
-                {CATEGORY_LABELS[category]}
-              </option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            className="border border-line px-3 py-2 font-sans text-xs uppercase tracking-[0.12em] text-ink transition-colors hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            Generate
-          </button>
-        </form>
-      </details>
 
       {pending.length === 0 ? (
         <p className="mt-10 text-ink-muted">Nothing awaiting review.</p>
