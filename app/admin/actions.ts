@@ -7,7 +7,6 @@ import { revalidateStoryPaths } from "@/lib/revalidate";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { supabaseServer } from "@/lib/supabase/server";
 import { SITE } from "@/lib/site";
-import { runOnce } from "@/lib/pipeline/run";
 import type { StoryCategory } from "@/lib/db/types";
 
 export async function requireAdmin() {
@@ -60,13 +59,6 @@ export async function updateStory(id: string, formData: FormData) {
   };
   const { error } = await supabaseAdmin().from("stories").update(fields).eq("id", id);
   if (error) throw error;
-  revalidatePath("/admin");
-}
-
-export async function generateNow(formData: FormData) {
-  await requireAdmin();
-  const category = String(formData.get("category")) as StoryCategory;
-  await runOnce({ category });
   revalidatePath("/admin");
 }
 
