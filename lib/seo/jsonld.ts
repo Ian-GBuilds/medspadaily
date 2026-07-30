@@ -13,6 +13,7 @@ export function organizationJsonLd() {
     name: SITE.name,
     url: SITE.url,
     description: SITE.description,
+    sameAs: Object.values(SITE.social),
   };
 }
 

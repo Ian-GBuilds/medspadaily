@@ -31,6 +31,13 @@ export const SITE = {
     press: "press@medspadaily.com",
     clinics: "clinics@medspadaily.com",
   },
+  // Official social profiles — surfaced in the footer colophon and as
+  // Organization sameAs in JSON-LD.
+  social: {
+    youtube: "https://www.youtube.com/@MedSpaDaily",
+    instagram: "https://www.instagram.com/medspadaily/",
+    tiktok: "https://www.tiktok.com/@medspadaily",
+  },
 } as const;
 
 // ---------------------------------------------------------------------------

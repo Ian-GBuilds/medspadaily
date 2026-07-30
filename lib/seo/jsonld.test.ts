@@ -52,4 +52,10 @@ describe("site-wide graphs", () => {
     expect((organizationJsonLd() as Record<string, unknown>)["@type"]).toBe("Organization");
     expect((webSiteJsonLd() as Record<string, unknown>)["@type"]).toBe("WebSite");
   });
+  it("organization lists social profiles as sameAs", () => {
+    const sameAs = (organizationJsonLd() as Record<string, unknown>).sameAs as string[];
+    expect(sameAs).toContain("https://www.youtube.com/@MedSpaDaily");
+    expect(sameAs).toContain("https://www.instagram.com/medspadaily/");
+    expect(sameAs).toContain("https://www.tiktok.com/@medspadaily");
+  });
 });

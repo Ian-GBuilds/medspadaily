@@ -127,7 +127,31 @@ export default async function Footer() {
               {SITE.typefaces}
             </span>
           </p>
-          <nav aria-label="Legal and feeds" className="flex flex-wrap gap-x-5 gap-y-2">
+          <nav aria-label="Social, legal, and feeds" className="flex flex-wrap gap-x-5 gap-y-2">
+            <a
+              href={SITE.social.youtube}
+              rel="me noopener"
+              target="_blank"
+              className={utilityLinkClass}
+            >
+              YouTube
+            </a>
+            <a
+              href={SITE.social.instagram}
+              rel="me noopener"
+              target="_blank"
+              className={utilityLinkClass}
+            >
+              Instagram
+            </a>
+            <a
+              href={SITE.social.tiktok}
+              rel="me noopener"
+              target="_blank"
+              className={utilityLinkClass}
+            >
+              TikTok
+            </a>
             <a href="/feed.xml" className={utilityLinkClass}>RSS</a>
             <Link href="/privacy" className={utilityLinkClass}>Privacy</Link>
             <Link href="/terms" className={utilityLinkClass}>Terms</Link>
