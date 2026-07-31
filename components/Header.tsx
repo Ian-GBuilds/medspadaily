@@ -43,11 +43,17 @@ const navLinks: { href: string; label: string }[] = [
 ];
 
 function formatToday(): string {
+  // Pinned to UTC: this is a server component, but if the string ever
+  // re-renders client-side an unpinned zone yields a different date for
+  // evening readers — a hydration mismatch that forces a full re-render
+  // (and a layout shift). The dateline is the edition's date, UTC by house
+  // convention.
   return new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 

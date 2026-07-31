@@ -23,6 +23,7 @@ import NewsletterForm from "@/components/NewsletterForm";
 
 const READ_LINKS = [
   { href: "/about", label: "About" },
+  { href: "/about-the-author", label: "About the author" },
   { href: "/how-we-source", label: "How we source" },
   { href: "/for-clinics", label: "For clinics" },
   { href: "/corrections", label: "Corrections" },

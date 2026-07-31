@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import StoryCard from "@/components/StoryCard";
 import TierBadge from "@/components/TierBadge";
@@ -8,6 +9,8 @@ import { organizationJsonLd, webSiteJsonLd } from "@/lib/seo/jsonld";
 import { CATEGORY_LABELS, CATEGORY_ROUTES } from "@/lib/site";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 // ---------------------------------------------------------------------------
 // Front page — a considered broadsheet, not a feed.
@@ -38,6 +41,7 @@ function formatDate(iso: string): string {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 

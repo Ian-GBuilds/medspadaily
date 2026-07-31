@@ -7,12 +7,21 @@ import WebVitals from "@/components/WebVitals";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
+// display: "optional" skips the fallback→webfont swap when the font misses
+// the first paint window — the swap was shifting <time>/meta text and
+// contributing to the article template failing CLS (0.149). On repeat visits
+// the cached font is used from the start.
 const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
   variable: "--font-newsreader",
+  display: "optional",
 });
-const workSans = Work_Sans({ subsets: ["latin"], variable: "--font-worksans" });
+const workSans = Work_Sans({
+  subsets: ["latin"],
+  variable: "--font-worksans",
+  display: "optional",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),

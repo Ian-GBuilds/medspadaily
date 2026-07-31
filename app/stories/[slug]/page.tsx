@@ -9,8 +9,16 @@ import MedicalDisclaimer from "@/components/MedicalDisclaimer";
 import Prose from "@/components/Prose";
 import SourcesBlock from "@/components/SourcesBlock";
 import TierBadge from "@/components/TierBadge";
-import { getStoryBySlug, getTreatmentBySlug } from "@/lib/db/queries";
-import { faqPageJsonLd, newsArticleJsonLd } from "@/lib/seo/jsonld";
+import {
+  getPublishedStories,
+  getStoryBySlug,
+  getTreatmentBySlug,
+} from "@/lib/db/queries";
+import {
+  faqPageJsonLd,
+  newsArticleJsonLd,
+  storyBreadcrumbJsonLd,
+} from "@/lib/seo/jsonld";
 import {
   CATEGORY_LABELS,
   CATEGORY_ROUTES,
@@ -19,6 +27,20 @@ import {
 } from "@/lib/site";
 
 export const revalidate = 300;
+
+// Without generateStaticParams, Next treats a dynamic segment as
+// request-time-only and `revalidate` never applies (articles were serving
+// `no-store`, x-vercel-cache MISS). Prerender known slugs at build; new
+// slugs are rendered on demand and cached (dynamicParams defaults to true).
+// Falls back to [] so a Supabase outage can't fail the build.
+export async function generateStaticParams() {
+  try {
+    const stories = await getPublishedStories();
+    return stories.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
+}
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -64,10 +86,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // ---------------------------------------------------------------------------
 
 function formatDate(iso: string): string {
+  // timeZone pinned so server and client render the identical string — a
+  // locale/zone mismatch here causes a hydration re-render (layout shift).
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -84,6 +109,7 @@ export default async function StoryPage({ params }: Props) {
   return (
     <article className="py-12">
       <JsonLd data={newsArticleJsonLd(story)} />
+      <JsonLd data={storyBreadcrumbJsonLd(story)} />
       {story.faq && story.faq.length > 0 && (
         <JsonLd data={faqPageJsonLd(story.faq)} />
       )}
@@ -122,7 +148,14 @@ export default async function StoryPage({ params }: Props) {
       {/* 4. Byline block — a printed masthead credit line */}
       <dl className="mt-8 grid grid-cols-[max-content_1fr] gap-x-6 gap-y-1.5 border-y border-line py-5 font-sans text-[0.75rem] uppercase tracking-[0.14em] text-ink-muted">
         <dt>By</dt>
-        <dd className="text-ink">{SITE.byline}</dd>
+        <dd className="text-ink">
+          <Link
+            href={SITE.author.path}
+            className="underline decoration-line underline-offset-4 hover:decoration-accent"
+          >
+            {SITE.author.name}
+          </Link>
+        </dd>
 
         <dt>Filed under</dt>
         <dd className="text-ink">

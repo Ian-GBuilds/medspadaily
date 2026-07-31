@@ -8,12 +8,28 @@ import StoryCard from "@/components/StoryCard";
 import {
   getRelatedStoriesForTreatment,
   getTreatmentBySlug,
+  getTreatments,
 } from "@/lib/db/queries";
-import { faqPageJsonLd, medicalWebPageJsonLd } from "@/lib/seo/jsonld";
+import {
+  faqPageJsonLd,
+  medicalWebPageJsonLd,
+  treatmentBreadcrumbJsonLd,
+} from "@/lib/seo/jsonld";
 import { classifyTreatment, FAMILY_LABELS } from "@/lib/treatments";
 import { SITE } from "@/lib/site";
 
 export const revalidate = 3600;
+
+// Required for `revalidate` to take effect on a dynamic segment — see the
+// matching note in stories/[slug]/page.tsx.
+export async function generateStaticParams() {
+  try {
+    const treatments = await getTreatments();
+    return treatments.map((t) => ({ slug: t.slug }));
+  } catch {
+    return [];
+  }
+}
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -62,6 +78,7 @@ export default async function TreatmentPage({ params }: Props) {
   return (
     <article className="py-12">
       <JsonLd data={medicalWebPageJsonLd(t)} />
+      <JsonLd data={treatmentBreadcrumbJsonLd(t)} />
       <JsonLd data={faqPageJsonLd(t.faq)} />
 
       {/* Eyebrow — family + reference-entry marker */}
@@ -98,7 +115,18 @@ export default async function TreatmentPage({ params }: Props) {
             year: "numeric",
             month: "long",
             day: "numeric",
+            timeZone: "UTC",
           })}
+        </dd>
+
+        <dt>Reviewed by</dt>
+        <dd className="text-ink">
+          <Link
+            href={SITE.author.path}
+            className="underline decoration-line underline-offset-4 hover:decoration-accent"
+          >
+            {SITE.author.name}
+          </Link>
         </dd>
       </dl>
 

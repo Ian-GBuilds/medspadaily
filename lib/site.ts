@@ -38,6 +38,17 @@ export const SITE = {
     instagram: "https://www.instagram.com/medspadaily/",
     tiktok: "https://www.tiktok.com/@medspadaily",
   },
+  // Publisher logo — must stay ≥112×112 and on-domain; required for
+  // NewsArticle rich-result / Top Stories eligibility.
+  logo: { path: "/logo.png", width: 512, height: 512 },
+  // Named author & clinical reviewer — every story carries this byline
+  // (Person, not Organization) for YMYL E-E-A-T.
+  author: {
+    name: "Ian Gauntt, RN, BSN",
+    jobTitle: "Author & Clinical Reviewer",
+    path: "/about-the-author",
+    sameAs: ["https://www.linkedin.com/in/ian-gauntt-53018241a/"],
+  },
 } as const;
 
 // ---------------------------------------------------------------------------

@@ -6,7 +6,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [stories, treatments] = await Promise.all([
     getPublishedStories(), getTreatments(),
   ]);
-  const staticPages = ["", "/about", "/how-we-source", "/treatments", "/subscribe",
+  const staticPages = ["", "/about", SITE.author.path, "/how-we-source",
+    "/treatments", "/subscribe", "/for-clinics", "/corrections",
     "/privacy", "/terms",
     ...Object.values(CATEGORY_ROUTES).map((r) => `/${r}`),
   ].map((p) => ({ url: `${SITE.url}${p}`, changeFrequency: "daily" as const }));

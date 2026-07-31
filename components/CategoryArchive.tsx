@@ -1,10 +1,16 @@
+import JsonLd from "@/components/JsonLd";
 import StoryCard from "@/components/StoryCard";
 import { getPublishedStories } from "@/lib/db/queries";
 import type { StoryCategory } from "@/lib/db/types";
 import {
+  breadcrumbJsonLd,
+  collectionPageJsonLd,
+} from "@/lib/seo/jsonld";
+import {
   CATEGORIES,
   CATEGORY_DESCRIPTIONS,
   CATEGORY_LABELS,
+  CATEGORY_ROUTES,
   CATEGORY_TIER_RULE,
   TIER_META,
 } from "@/lib/site";
@@ -58,6 +64,16 @@ export default async function CategoryArchive({
 
   return (
     <div className="py-12">
+      <JsonLd data={collectionPageJsonLd(category)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          {
+            name: CATEGORY_LABELS[category],
+            path: `/${CATEGORY_ROUTES[category]}`,
+          },
+        ])}
+      />
+
       {/* Header block */}
       <div className="border-b border-line pb-10">
         <p className="small-caps font-sans text-xs text-ink-muted">

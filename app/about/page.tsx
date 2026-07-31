@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
 import MedicalDisclaimer from "@/components/MedicalDisclaimer";
+import { aboutPageJsonLd } from "@/lib/seo/jsonld";
 import {
   CATEGORIES,
   CATEGORY_DESCRIPTIONS,
@@ -51,6 +53,8 @@ const CONTACT_PATHS: { label: string; email: string; note: string }[] = [
 export default function AboutPage() {
   return (
     <div className="py-12">
+      <JsonLd data={aboutPageJsonLd()} />
+
       {/* Header */}
       <div className="border-b border-line pb-10">
         <p className="small-caps font-sans text-xs text-ink-muted">
@@ -84,6 +88,23 @@ export default function AboutPage() {
             </div>
           ))}
         </dl>
+      </section>
+
+      {/* Who writes it */}
+      <section className="border-b border-line py-10">
+        <h2 className="small-caps font-sans text-xs text-ink-muted">
+          Who writes it
+        </h2>
+        <p className="mt-5 leading-relaxed text-ink-muted">
+          Every story is written and clinically reviewed by{" "}
+          <Link
+            href={SITE.author.path}
+            className="text-ink underline decoration-line underline-offset-4 hover:decoration-accent"
+          >
+            {SITE.author.name}
+          </Link>
+          , a registered nurse with nearly a decade in ICU critical care.
+        </p>
       </section>
 
       {/* What being independent means */}

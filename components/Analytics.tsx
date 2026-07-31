@@ -10,11 +10,13 @@ export default function Analytics() {
   if (!GA_ID) return null;
   return (
     <>
+      {/* lazyOnload keeps the 167KB gtag fetch out of the early network
+          window where it was competing with the LCP hero image. */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="ga-init" strategy="afterInteractive">
+      <Script id="ga-init" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
