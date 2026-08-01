@@ -1,26 +1,26 @@
 import { config } from "dotenv";
-// Load local env the same way Next does (.env.local first, then .env), so a
-// local run submits real production URLs. In CI/Vercel the vars are already in
-// the environment and these no-op.
+// Load local env the same way Next does (.env.local first, then .env) so a
+// local run targets the right host. In CI/Vercel the vars are already present.
 config({ path: ".env.local" });
 config();
-
-import { getPublishedStories, getTreatments } from "../lib/db/queries";
-import { CATEGORY_ROUTES } from "../lib/site";
 
 // ---------------------------------------------------------------------------
 // IndexNow submitter. Pings the IndexNow API (Bing / Yandex / Seznam, and the
 // signal Microsoft Copilot's index consumes) with the site's current URL set
 // so freshly published stories get discovered fast instead of waiting for a
-// crawl. Run after publishing: `npm run indexnow`.
+// crawl. Run after publishing / deploy: `npm run indexnow`.
 //
-// Requires a key file served at the site root: public/<KEY>.txt whose contents
-// are exactly <KEY>. Keep INDEXNOW_KEY below in sync with that filename.
+// URL source is the site's *live* sitemap.xml — the canonical list we already
+// hand search engines. That keeps IndexNow perfectly in sync with the sitemap,
+// needs no database credentials, and doesn't couple this script to a Node/
+// supabase-js version. Requires the key file served at the site root:
+// public/<KEY>.txt whose contents are exactly <KEY>. Keep INDEXNOW_KEY below in
+// sync with that filename.
 // ---------------------------------------------------------------------------
 
 const KEY = process.env.INDEXNOW_KEY ?? "4c4a5efd206c82be6ff7f2c585653fd3";
 
-// Resolve the public host. Prefer the configured site URL; fall back to the
+// Resolve the public origin. Prefer the configured site URL; fall back to the
 // known production domain (a localhost value would be rejected by IndexNow).
 function resolveOrigin(): string {
   const raw = process.env.NEXT_PUBLIC_SITE_URL;
@@ -30,34 +30,34 @@ function resolveOrigin(): string {
   return "https://www.medspadaily.com";
 }
 
+async function fetchSitemapUrls(origin: string): Promise<string[]> {
+  const res = await fetch(`${origin}/sitemap.xml`);
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${origin}/sitemap.xml (${res.status})`);
+  }
+  const xml = await res.text();
+  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
+  // Keep only URLs on our own host — IndexNow rejects a mixed-host urlList.
+  const host = new URL(origin).host;
+  const own = urls.filter((u) => {
+    try {
+      return new URL(u).host === host;
+    } catch {
+      return false;
+    }
+  });
+  return [...new Set(own)];
+}
+
 async function main() {
   const origin = resolveOrigin();
   const host = new URL(origin).host;
 
-  const [stories, treatments] = await Promise.all([
-    getPublishedStories(),
-    getTreatments(),
-  ]);
-
-  const staticPaths = [
-    "",
-    "/treatments",
-    "/about",
-    "/about-the-author",
-    "/how-we-source",
-    "/subscribe",
-    "/for-clinics",
-    "/corrections",
-    "/privacy",
-    "/terms",
-    ...Object.values(CATEGORY_ROUTES).map((r) => `/${r}`),
-  ];
-
-  const urlList = [
-    ...staticPaths.map((p) => `${origin}${p}`),
-    ...stories.map((s) => `${origin}/stories/${s.slug}`),
-    ...treatments.map((t) => `${origin}/treatments/${t.slug}`),
-  ];
+  const urlList = await fetchSitemapUrls(origin);
+  if (urlList.length === 0) {
+    console.error("IndexNow: sitemap returned 0 usable URLs — aborting.");
+    process.exit(1);
+  }
 
   const payload = {
     host,
