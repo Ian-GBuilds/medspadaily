@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import CategoryArchive from "@/components/CategoryArchive";
-import { CATEGORY_DESCRIPTIONS } from "@/lib/site";
+import { categoryMetadata } from "@/lib/seo/metadata";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "Industry",
-  description: CATEGORY_DESCRIPTIONS.industry,
-  alternates: { canonical: "/industry" },
-};
+export function generateMetadata(): Promise<Metadata> {
+  return categoryMetadata("industry");
+}
 
 export default function Page() { return <CategoryArchive category="industry" />; }

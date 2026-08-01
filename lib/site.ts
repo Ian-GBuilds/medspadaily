@@ -8,6 +8,12 @@ import type { StoryCategory } from "./db/types";
 // letterhead ("motto", "colophon", "byline"), it lives here.
 // ---------------------------------------------------------------------------
 
+// Last substantive edit to the static informational/legal pages (About, How
+// we source, Subscribe, For clinics, Corrections, Privacy, Terms). Used as
+// their sitemap lastmod so it reflects real content — bump this when that copy
+// is edited, not on every deploy.
+export const LEGAL_LAST_REVISED = "2026-08-01";
+
 export const SITE = {
   name: "MedSpa Daily",
   // Short tagline used in <title> and og:description contexts. Kept flat so
@@ -47,6 +53,11 @@ export const SITE = {
     name: "Ian Gauntt, RN, BSN",
     jobTitle: "Author & Clinical Reviewer",
     path: "/about-the-author",
+    // Stable, unique handle for the profile author. Emitted as Person.identifier
+    // — Google's ProfilePage rich result requires a unique id for the profiled
+    // person; without it the profile result won't build.
+    identifier: "ian-gauntt",
+    image: { path: "/ian-gauntt.jpg", width: 600, height: 600 },
     sameAs: ["https://www.linkedin.com/in/ian-gauntt-53018241a/"],
   },
 } as const;

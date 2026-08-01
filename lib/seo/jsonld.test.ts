@@ -36,6 +36,7 @@ describe("newsArticleJsonLd", () => {
     expect(author.name).toBe("Ian Gauntt, RN, BSN");
     expect(author.url).toContain("/about-the-author");
     expect(author.sameAs).toContain("https://www.linkedin.com/in/ian-gauntt-53018241a/");
+    expect((author.image as Record<string, unknown>).url).toContain("/ian-gauntt.jpg");
   });
   it("publisher is inlined with the logo required for News eligibility", () => {
     const pub = ld.publisher as Record<string, unknown>;

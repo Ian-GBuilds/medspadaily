@@ -117,8 +117,12 @@ export default async function Header() {
         <ul className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-6 py-3">
           {navLinks.map((link) => (
             <li key={link.href}>
+              {/* prefetch disabled: the masthead nav renders on every page, so
+                  default hover/viewport prefetch fires 7 duplicate _rsc=
+                  fetches per view for links most readers never take. */}
               <Link
                 href={link.href}
+                prefetch={false}
                 className="font-sans text-[0.6875rem] uppercase tracking-[0.18em] text-ink-muted transition-colors hover:text-ink focus-visible:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
               >
                 {link.label}

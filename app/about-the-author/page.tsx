@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   description:
     "Ian Gauntt, RN, BSN writes and clinically reviews MedSpa Daily. A registered nurse with nearly a decade in ICU critical care, he reads the primary literature behind every story.",
   alternates: { canonical: SITE.author.path },
+  openGraph: { images: [SITE.author.image.path] },
 };
 
 // ---------------------------------------------------------------------------
@@ -26,19 +28,32 @@ export default function AboutTheAuthorPage() {
     <div className="py-12">
       <JsonLd data={profilePageJsonLd()} />
 
-      {/* Header */}
-      <div className="border-b border-line pb-10">
-        <p className="small-caps font-sans text-xs text-ink-muted">
-          The masthead · Author &amp; clinical reviewer
-        </p>
-        <h1 className="mt-3 text-4xl leading-[1.1] text-wrap-balance sm:text-5xl">
-          {SITE.author.name}
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted">
-          Every story on {SITE.name} is written and clinically reviewed by Ian
-          Gauntt, a registered nurse who spent nearly a decade at the bedside
-          in ICU critical care before turning to health journalism.
-        </p>
+      {/* Header — text left, portrait right (stacked on mobile). The
+          portrait keeps its native black-and-white; it reads like a printed
+          contributor photo against the paper background. */}
+      <div className="border-b border-line pb-10 sm:flex sm:items-start sm:justify-between sm:gap-10">
+        <div>
+          <p className="small-caps font-sans text-xs text-ink-muted">
+            The masthead · Author &amp; clinical reviewer
+          </p>
+          <h1 className="mt-3 text-4xl leading-[1.1] text-wrap-balance sm:text-5xl">
+            {SITE.author.name}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted">
+            Every story on {SITE.name} is written and clinically reviewed by
+            Ian Gauntt, a registered nurse who spent nearly a decade at the
+            bedside in ICU critical care before turning to health journalism.
+          </p>
+        </div>
+        <Image
+          src={SITE.author.image.path}
+          alt={`Portrait of ${SITE.author.name}`}
+          width={SITE.author.image.width}
+          height={SITE.author.image.height}
+          priority
+          sizes="(min-width: 640px) 11rem, 10rem"
+          className="mt-8 h-40 w-40 shrink-0 border border-line object-cover sm:mt-1 sm:h-44 sm:w-44"
+        />
       </div>
 
       {/* The clinical background */}

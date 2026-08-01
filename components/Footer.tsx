@@ -25,6 +25,7 @@ const READ_LINKS = [
   { href: "/about", label: "About" },
   { href: "/about-the-author", label: "About the author" },
   { href: "/how-we-source", label: "How we source" },
+  { href: "/subscribe", label: "Subscribe" },
   { href: "/for-clinics", label: "For clinics" },
   { href: "/corrections", label: "Corrections" },
 ];
@@ -68,6 +69,7 @@ export default async function Footer() {
                 <li key={c}>
                   <Link
                     href={`/${CATEGORY_ROUTES[c]}`}
+                    prefetch={false}
                     className="text-sm text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     {/* News desk is called "Treatment News" in navigation
@@ -81,6 +83,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/treatments"
+                  prefetch={false}
                   className="text-sm text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   Treatments
@@ -96,6 +99,7 @@ export default async function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-sm text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     {link.label}
@@ -114,6 +118,15 @@ export default async function Footer() {
               One considered, sourced story each morning.
             </p>
             <NewsletterForm />
+            <p className="mt-4 text-sm leading-relaxed text-ink-muted">
+              <Link
+                href="/subscribe"
+                prefetch={false}
+                className="text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                More about the daily edition →
+              </Link>
+            </p>
           </div>
         </div>
 
@@ -154,8 +167,8 @@ export default async function Footer() {
               TikTok
             </a>
             <a href="/feed.xml" className={utilityLinkClass}>RSS</a>
-            <Link href="/privacy" className={utilityLinkClass}>Privacy</Link>
-            <Link href="/terms" className={utilityLinkClass}>Terms</Link>
+            <Link href="/privacy" prefetch={false} className={utilityLinkClass}>Privacy</Link>
+            <Link href="/terms" prefetch={false} className={utilityLinkClass}>Terms</Link>
           </nav>
         </div>
       </div>

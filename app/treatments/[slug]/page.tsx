@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import InlineNewsletterCTA from "@/components/InlineNewsletterCTA";
 import JsonLd from "@/components/JsonLd";
 import MedicalDisclaimer from "@/components/MedicalDisclaimer";
 import Prose from "@/components/Prose";
@@ -169,15 +170,23 @@ export default async function TreatmentPage({ params }: Props) {
         </section>
       )}
 
-      {/* Available at — placeholder for the future clinic directory. Present
-          as a signal (both to readers and to clinics) that this is where
-          location listings will appear when the directory ships. */}
+      {/* Finding a provider — an interim reader next-step while the clinic
+          directory is built. A reference page that ends in a dead "directory
+          coming soon" stub gives the reader nowhere to go; this gives them
+          something actionable now (what to vet for) plus the clinic path. */}
       <section className="mt-16 border-t border-line pt-8">
         <h2 className="small-caps font-sans text-xs text-ink-muted">
-          Available at
+          Finding a provider
         </h2>
         <p className="mt-5 leading-relaxed text-ink-muted">
-          A curated list of clinics offering {t.name} is in the works.
+          A curated directory of clinics offering {t.name} is in the works.
+          Until it ships, look for a licensed medical provider — a physician,
+          nurse practitioner, physician assistant, or RN working under medical
+          supervision — who will assess your history before treating, explains
+          risks plainly, and uses FDA-cleared products. Ask who performs the
+          treatment and who supervises.
+        </p>
+        <p className="mt-4 leading-relaxed text-ink-muted">
           Clinicians —{" "}
           <Link
             href="/for-clinics"
@@ -202,6 +211,8 @@ export default async function TreatmentPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      <InlineNewsletterCTA source="treatment" />
 
       <MedicalDisclaimer />
 

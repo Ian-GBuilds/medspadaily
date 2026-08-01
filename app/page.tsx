@@ -6,7 +6,12 @@ import StoryCard from "@/components/StoryCard";
 import TierBadge from "@/components/TierBadge";
 import { getPublishedStories } from "@/lib/db/queries";
 import { organizationJsonLd, webSiteJsonLd } from "@/lib/seo/jsonld";
-import { CATEGORY_LABELS, CATEGORY_ROUTES } from "@/lib/site";
+import {
+  CATEGORIES,
+  CATEGORY_DESCRIPTIONS,
+  CATEGORY_LABELS,
+  CATEGORY_ROUTES,
+} from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -171,6 +176,45 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Sections index — a standing table of contents. Gives the front page a
+       * substantial, citable text body even on a light news day (it no longer
+       * bottoms out at a few hundred characters), and hands crawlers a clean
+       * set of internal links into every desk plus the treatment guide. */}
+      <section aria-label="Browse the paper" className="border-t border-line py-12">
+        <div className="flex items-baseline justify-between border-b border-line pb-3">
+          <h2 className="small-caps font-sans text-xs text-ink-muted">
+            The sections
+          </h2>
+        </div>
+        <ul className="divide-y divide-line">
+          {CATEGORIES.map((c) => (
+            <li key={c} className="py-5">
+              <Link
+                href={`/${CATEGORY_ROUTES[c]}`}
+                className="font-serif text-xl text-ink transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+              >
+                {c === "treatments" ? "Treatment News" : CATEGORY_LABELS[c]}
+              </Link>
+              <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-muted">
+                {CATEGORY_DESCRIPTIONS[c]}
+              </p>
+            </li>
+          ))}
+          <li className="py-5">
+            <Link
+              href="/treatments"
+              className="font-serif text-xl text-ink transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            >
+              Treatment guide
+            </Link>
+            <p className="mt-1.5 max-w-2xl leading-relaxed text-ink-muted">
+              A plain-language reference to what each treatment is, what to
+              expect, and what the evidence supports.
+            </p>
+          </li>
+        </ul>
+      </section>
     </div>
   );
 }

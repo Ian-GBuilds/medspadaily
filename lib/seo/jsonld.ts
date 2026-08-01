@@ -13,7 +13,14 @@ export function authorPerson() {
     "@type": "Person",
     "@id": `${SITE.url}${SITE.author.path}#person`,
     name: SITE.author.name,
+    identifier: SITE.author.identifier,
     url: `${SITE.url}${SITE.author.path}`,
+    image: {
+      "@type": "ImageObject",
+      url: `${SITE.url}${SITE.author.image.path}`,
+      width: SITE.author.image.width,
+      height: SITE.author.image.height,
+    },
     jobTitle: SITE.author.jobTitle,
     sameAs: [...SITE.author.sameAs],
     worksFor: { "@id": `${SITE.url}/#organization` },
@@ -143,6 +150,17 @@ export function newsArticleJsonLd(story: StoryRow) {
     // so article pages satisfy the publisher-logo requirement standalone —
     // parsers don't resolve cross-page @id references.
     publisher: organizationNode(),
+    // Machine-readable sourcing. The visible bibliography (SourcesBlock) is the
+    // human copy; this mirrors it as structured `citation` so AI extractors and
+    // Google don't have to parse the in-body HTML pattern to find our sources.
+    citation: story.sources.length
+      ? story.sources.map((s) => ({
+          "@type": "CreativeWork",
+          name: s.title,
+          url: s.url,
+          ...(s.publication ? { publisher: s.publication } : {}),
+        }))
+      : undefined,
     isAccessibleForFree: true,
   };
 }
